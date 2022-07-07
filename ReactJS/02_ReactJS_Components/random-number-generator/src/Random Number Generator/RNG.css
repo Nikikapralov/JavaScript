@@ -1,0 +1,106 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap");
+
+:root {
+  --white: #fff;
+  --black: #1c2b2d;
+  --blue: #31326f;
+  --light-blue: #005490;
+  --color-primary: #9d0191;
+  --color-sec: #db6400;
+  --grey: #eee;
+  --dark-grey: #222831;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10px;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+}
+
+p {
+  font-size: 1.6rem;
+  line-height: 1.5;
+}
+
+img {
+  width: 100%;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+
+.application {
+  background-color: #005490;
+  width: 500px;
+  height: 250px;
+  border: solid 2px grey;
+  border-radius: 5px;
+  text-align: center;
+}
+
+h1 {
+  color: white;
+  font-size: 20px;
+  text-align: center;
+  padding: 20px;
+  }
+
+
+
+.counter {
+  color: white;
+  font-size: 30px;
+  text-align: center;
+  border: solid 0.5px white;
+  border-radius: 3px;
+  width: 40px;
+  margin: 0 auto;
+  padding: 4px;
+}
+
+.button {
+  text-align: center;
+  margin-top: 35px;
+  margin-right: 5px;
+  width: 190px;
+  height: 50px;
+  font-size: 17px;
+  font-weight: bold;
+  padding-bottom: 8px;
+  border: 1px solid black;
+  border-radius: 3px;
+}
+
+hr {
+  margin-top: 5px;
+}
+
+i {
+  margin-top: 8px;
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+.button:hover{
+  background-color: red;
+}
+
+.button:active{
+  background-color: greenyellow;
+}
