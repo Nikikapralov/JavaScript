@@ -1,0 +1,18 @@
+{
+  "name": "07_unit_testing_exercises",
+  "version": "1.0.0",
+  "description": "",
+  "main": "01_Request_validator.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha tests/*.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^10.1.0"
+  }
+}
