@@ -1,0 +1,17 @@
+{
+  "name": "08-classes-exercises",
+  "version": "1.0.0",
+  "description": "",
+  "main": "01_Rectangle.js",
+  "scripts": {
+    "test": "mocha test/*.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "-": "0.0.1",
+    "chai": "^4.3.6",
+    "g": "^2.0.1",
+    "mocha": "^10.1.0"
+  }
+}
