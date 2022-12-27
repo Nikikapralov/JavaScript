@@ -1,0 +1,9 @@
+export const baseUrl = "http://localhost:3030"
+export const registerUrl = `${baseUrl}/users/register`
+export const loginUrl = `${baseUrl}/users/login`
+export const logoutUrl = `${baseUrl}/users/logout`
+export const getEntriesUrl = `${baseUrl}/data/albums?sortBy=_createdOn%20desc&distinct=name`
+export const getSingleEntryUrl = `${baseUrl}/data/albums/`
+export const createEntryUrl = `${baseUrl}/data/albums`
+export const deleteEntryUrl = `${baseUrl}/data/albums/:id`
+export const editEntryUrl = `${baseUrl}/data/albums/:id`

@@ -1,0 +1,9 @@
+export const baseUrl = "http://localhost:3030"
+export const registerUrl = `${baseUrl}/users/register`
+export const loginUrl = `${baseUrl}/users/login`
+export const logoutUrl = `${baseUrl}/users/logout`
+export const getEntriesUrl = `${baseUrl}/data/products?sortBy=_createdOn%20desc`
+export const getSingleEntryUrl = `${baseUrl}/data/products`
+export const createEntryUrl = `${baseUrl}/data/products`
+export const deleteEntryUrl = `${baseUrl}/data/products`
+export const editEntryUrl = `${baseUrl}/data/products`
