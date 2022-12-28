@@ -1,4 +1,5 @@
-function solve() {
+import { applyLoginPolicy, rerender } from "./utils.js"
 
-  //TODO...
-}
+applyLoginPolicy()
+
+rerender()
