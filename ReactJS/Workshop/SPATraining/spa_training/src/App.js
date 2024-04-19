@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import { Header } from './components/HTMX/Header.jsx';
+import { Header } from './components/HTMX/Header.js';
 import './App.css';
 
 function App() {
