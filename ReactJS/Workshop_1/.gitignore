@@ -1,5 +1,14 @@
-*/config_env.py
-*/__pycache__
-*/.idea
-*/.venv
-*/node_modules
+# Ignore config_env.py files in all directories
+**/config_env.py
+
+# Ignore __pycache__ directories in all directories
+**/__pycache__/
+
+# Ignore .idea directory in all directories
+**/.idea/
+
+# Ignore .venv directory in all directories
+**/.venv/
+
+# Ignore node_modules directory in all directories
+**/node_modules/
