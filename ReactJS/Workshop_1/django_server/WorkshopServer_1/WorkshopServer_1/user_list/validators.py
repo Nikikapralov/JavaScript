@@ -7,6 +7,9 @@ def custom_email_validator(email: str) -> None:
     :param email: Provided email.
     :return: None/raise Error
     """
+    if "@" not in email:
+        raise ValidationError(f"An email must have a '@' in it."
+                              f"Provided email: {email} does not contain a @.")
     LIMIT: int = 3
     first_part, second_part = email.split("@")
     if len(second_part) < LIMIT:
@@ -38,6 +41,3 @@ def custom_phone_number_validator(phone_number: str) -> None:
                               f" or is not exactly {EXACT_LENGTH} chars long.")
 
 
-def min_value_validator_string_convert(value: str):
-    value = int(value)
-    return

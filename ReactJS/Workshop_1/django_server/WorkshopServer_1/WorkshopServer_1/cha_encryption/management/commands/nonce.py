@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 from WorkshopServer_1.cha_encryption.utils.utils import generate_nonce
+
 class Command(BaseCommand):
     """
     Creates a nonce and displays in on the screen.

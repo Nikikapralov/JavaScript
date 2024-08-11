@@ -2,7 +2,7 @@ from Crypto.Cipher import ChaCha20
 from base64 import b64encode, b64decode
 
 
-def encrypt_val(value: str, nonce: bytes, key: bytes) -> tuple[str, str]:
+def encrypt_val(value: str | int | float, nonce: bytes, key: bytes) -> tuple[str, str]:
     """
     Encrypt the value using the XChaCha20 algorithm.
     :param value: The value to be encrypted.
@@ -10,6 +10,8 @@ def encrypt_val(value: str, nonce: bytes, key: bytes) -> tuple[str, str]:
     :param key: The 32 bytes encryption key.
     :return: The encrypted value and the nonce.
     """
+    if not isinstance(value, str):
+        value: str = str(value)
     value: bytes = value.encode()
     cipher: ChaCha20 = ChaCha20.new(key=key, nonce=nonce)
     ciphertext: bytes = cipher.encrypt(plaintext=value)

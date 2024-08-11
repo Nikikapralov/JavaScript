@@ -16,7 +16,7 @@ class Address(EncryptionModel, models.Model):
     If no people share an address, it gets deleted. (By a celery scheduled cron job, once a day).
     """
 
-    encryption_fields = {"country", "city", "street", "street_number"}
+    encryption_fields: set[str, ...] = {"country", "city", "street", "street_number"}
 
     uid: models.UUIDField = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 

@@ -5,8 +5,9 @@ if TYPE_CHECKING:
     pass
 
 from django.db import transaction
-
+from django.core import validators
 from rest_framework import serializers
+from django.core.exceptions import ValidationError
 from WorkshopServer_1.user_list.models import UserExtension, Address
 from WorkshopServer_1.cha_encryption.serializers import DecryptionSerializerMixin
 
@@ -19,6 +20,54 @@ class AddressSerializerGetPostUpdate(DecryptionSerializerMixin, serializers.Mode
         model: Address = Address
         fields: list[str, ...] = ["uid", "street", "street_number", "city", "country"]
 
+    def to_representation(self, instance: Address) -> dict[str, Any]:
+        """
+        Since this is a model serializer and we have a char field as the street number (it is encrypted
+        as string data), the decrypted street number will always be returned as a string.
+        We have to manually cast it to integer in the data dict before we return it.
+        :param instance: The address instance.
+        :return: The data dictionary with the address attributes.
+        """
+        data: dict[str, Any] = super().to_representation(instance=instance)
+        data["street_number"] = int(data["street_number"]) # Return the data as a string
+        return data
+
+    def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
+        """
+        We cannot use database validations since the fields there accept the already encrypted data.
+        As such, we must do all of the validation on the serializer level.
+        First, we declare the fields and the specific validation for each field and
+        then we validate them.
+        :param attrs: The validated data.
+        :return: The validated data.
+        """
+        fields_validator_map: dict[str, validators.MinLengthValidator | validators.MinValueValidator] = {
+            "street": validators.MinLengthValidator(limit_value=3),
+            "city": validators.MinLengthValidator(limit_value=3),
+            "country": validators.MinLengthValidator(limit_value=2),
+            "street_number": validators.MinValueValidator(limit_value=1),
+        }
+
+        attrs["street_number"] = int(attrs["street_number"])
+
+        # Collect all the exception in one dictionary.
+        exceptions_dict: dict[str, str] = {}
+
+        for key, value in attrs.items():
+            validator = fields_validator_map[key]
+            try:
+                # Apply the validator to the field value
+                validator(value)
+            except ValidationError as e:
+                # Raise a validation error with a meaningful message
+                exceptions_dict.update({key: str(e)})
+
+        # Return all the exceptions at once for a better user experience.
+        if exceptions_dict:
+            raise ValidationError(exceptions_dict)
+
+        return attrs
+
 
 class UserExtensionSerializerLimited(serializers.ModelSerializer):
     """
@@ -28,7 +77,8 @@ class UserExtensionSerializerLimited(serializers.ModelSerializer):
 
     class Meta:
         model: UserExtension = UserExtension
-        fields: list[str, ...] = ["uid", "first_name", "last_name", "email", "imageUrl", "phone_number"]
+        fields: list[str, ...] = ["uid", "first_name", "last_name", "email",
+                                  "imageUrl", "phone_number", "created_at"]
 
 
 class UserExtensionSerializerFull(serializers.ModelSerializer):
@@ -42,7 +92,8 @@ class UserExtensionSerializerFull(serializers.ModelSerializer):
     class Meta:
         model: UserExtension = UserExtension
         fields: list[str, ...] = ["uid", "first_name", "last_name",
-                                  "email", "imageUrl", "phone_number", "address"]
+                                  "email", "imageUrl", "phone_number",
+                                  "address", "created_at"]
 
     @transaction.atomic
     def create(self, validated_data: dict[str, Any]) -> UserExtension:
@@ -96,6 +147,29 @@ class UserExtensionSerializerFull(serializers.ModelSerializer):
         except Exception as e:
             raise e
         return instance
+
+    def validate(self, data: dict[str, Any]) -> dict[str, Any]:
+        """
+        Validate the nested address data and if any errors are found,
+        make sure to bubble the errors for the specific fields.
+        :param data: Json Data
+        :return: The validated data.
+        """
+        # Validate the nested address data
+        address_data: dict[str, Any] = data['address']
+        if address_data:
+            address_serializer = AddressSerializerGetPostUpdate(data=address_data)
+            if not address_serializer.is_valid():
+                # If the nested serializer has errors, include them in the main error response
+                raise serializers.ValidationError({
+                    'address': address_serializer.errors
+                })
+
+        return data
+
+
+
+
 
     # Deprecated through .get_or_create()
     # @staticmethod
