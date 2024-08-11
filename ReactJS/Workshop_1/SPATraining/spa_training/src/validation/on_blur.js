@@ -14,8 +14,6 @@ import { buildKeyHistory, buildNewObjectTreeLike } from "../utils/utils"
     else{
         setErrorFormFunc((previousErrorFormStatus) => buildNewObjectTreeLike(previousErrorFormStatus, false, path))
     }
-
-    console.log(errorData)
 }
 
 

@@ -6,6 +6,7 @@ import { handleOpen, handleClose } from "../../../utils/modal_utils"
 import { handleClick } from "../../../event_handlers/on_click"
 import { UserForm } from "../UserForm/UserForm"
 import { Modal } from "../../UTILS/Modal"
+import { handleSubmitForm } from "../UserForm/utils/on_submit"
 
 
 export function MainContent(props) {
@@ -19,8 +20,8 @@ export function MainContent(props) {
                 "component": UserForm,
                 "stateFunction": setNewUserModal,
                 "componentProps": {
-                    "stateFunction":
-                     setNewUserModal
+                    "stateFunction": setNewUserModal,
+                     "submitFunction": handleSubmitForm
                     }}}></Modal>
         : null}
     <section className="card users-container">

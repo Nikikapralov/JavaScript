@@ -31,7 +31,6 @@ export function buildKeyHistory(data, searchForKey, keyHistory=null, level=0){
     return keyHistory
 }
 
-
 export function getValueFromPath(obj, path) {
     // Use reduce to dynamically build the path to the dictionary and access the value.
     // Reduce accumulates the result. So first it is object["address"] then object["address"]["street_number"]
@@ -82,8 +81,24 @@ export function updateValueFromPath(obj, path, toUpdate){
 }
   
 
-export function buildNewObjectTreeLike(previousErrorFormStatus, value, path){
-    let newObject = {...previousErrorFormStatus}
-    updateValueFromPath(newObject, path, value)
-    return newObject
+export function buildNewObjectTreeLike(previousFormStatus, value, path, obj=null){
+    if (obj == null){
+        obj = {...previousFormStatus}
+    }
+    updateValueFromPath(obj, path, value)
+    return obj
+}
+
+
+export function depthFirstSearch(dataForm, valueToSearchFor){
+    for (const [key, value] of Object.entries(dataForm)){
+        if (typeof value == "object"){
+           return depthFirstSearch(value, valueToSearchFor)
+        }
+        if (value == valueToSearchFor){
+            return true
+        }
+    }
+
+    return false
 }

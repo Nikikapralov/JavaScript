@@ -1,5 +1,4 @@
 import styles from "./UserForm.module.css"
-import global_styles from "../../CSS/index.module.css"
 import button_styles from "../../CSS/buttons.module.css"
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark"
 import { faUser } from "@fortawesome/free-solid-svg-icons/faUser"
@@ -16,8 +15,7 @@ import { handleOnBlur } from "../../../event_handlers/on_blur"
 import { cityValidator, countryValidator, emailValidator, imageUrlValidator, nameValidator, phoneNumberValidator, streetNumberValidator, streetValidator } from "../../../validation/form_validations"
 import { validateData } from "../../../validation/on_blur"
 import { handleClose } from "../../../utils/modal_utils"
-import { handleSubmitForm } from "../../../event_handlers/on_submit"
-import { request } from "../../../services/requests"
+import { handleSubmitForm } from "./utils/on_submit"
 import { USERS } from "../../../settings"
 
 
@@ -53,7 +51,22 @@ export function UserForm(props){
       }
     })
 
-    let [serverErrorResponseForm, setServerErrorResponseForm] = useState({
+
+    const errorMessages = {
+      "first_name": "First name should be at least 3 characters long!",
+      "last_name": "Last name should be at least 3 characters long!",
+      "email": "Email is not valid!",
+      "phone_number": "Phone number is not valid!",
+      "imageUrl": "ImageUrl is not valid!",
+      "address": {
+        "country": "Country should be at least 2 characters long!",
+        "city": "City should be at least 3 characters long!",
+        "street": "Street should be at least 3 characters long!",
+        "street_number": "Street number should be a positive number!"
+      }
+  }
+
+    let [serverErrorResponseForm, setServerErrorResponseForm] = useState(    {
       "first_name": "",
       "last_name": "",
       "email": "",
@@ -68,6 +81,7 @@ export function UserForm(props){
   })
 
     const stateFunction = props.stateFunction
+    const submitFunction = props.submitFunction
 
 
  
@@ -91,7 +105,7 @@ export function UserForm(props){
                   onChange={(e) => handleChange(e, setDataForm, dataForm)}/>
                 </div>
                 { errorForm.first_name ? <p className={styles["form-error"]}>
-                  First name should be at least 3 characters long!
+                  {errorMessages.first_name}
                 </p> : null}
               </div>
               <div className={styles["form-group"]}>
@@ -103,7 +117,7 @@ export function UserForm(props){
                   onChange={(e) => handleChange(e, setDataForm, dataForm)}/>
                 </div>
                 { errorForm.last_name ? <p className={styles["form-error"]}>
-                  Last name should be at least 3 characters long!
+                  {errorMessages.last_name}
                 </p> : null}
               </div>
             </div>
@@ -118,7 +132,7 @@ export function UserForm(props){
                 onBlur={(e) => handleOnBlur(e, validateData, [emailValidator, setErrorForm, errorForm])}/>
                 </div>
                 { errorForm.email ? <p className={styles["form-error"]}>
-                    Email is not valid!</p> : null}
+                    {errorMessages.email}</p> : null}
               </div>
               <div className={styles["form-group"]}>
                 <label for="phoneNumber">Phone number</label>
@@ -129,7 +143,7 @@ export function UserForm(props){
                 onChange={(e) => handleChange(e, setDataForm, dataForm)}/>
                 </div>
                 { errorForm.phone_number ? <p className={styles["form-error"]}>
-                    Phone number is not valid!</p> : null}
+                    {errorMessages.phone_number}</p> : null}
               </div>
             </div>
 
@@ -142,7 +156,7 @@ export function UserForm(props){
             onChange={(e) => handleChange(e, setDataForm, dataForm)}/>
               </div>
               { errorForm.imageUrl ? <p className={styles["form-error"]}>
-                ImageUrl is not valid!</p> : null}
+                {errorMessages.imageUrl}</p> : null}
             </div>
 
             <div className={styles["form-row"]}>
@@ -157,7 +171,7 @@ export function UserForm(props){
                 </div>
               </div>
               { errorForm.address.country ? <p className={styles["form-error"]}>
-                  Country should be at least 2 characters long!
+                  {errorMessages.address.country}
                 </p> : null}
               </div>
               <div className={styles["form-group"]}>
@@ -169,7 +183,7 @@ export function UserForm(props){
                 onChange={(e) => handleChange(e, setDataForm, dataForm)}/>
                 </div>
                 { errorForm.address.city ? <p className={styles["form-error"]}>
-                  City should be at least 3 characters long!
+                  {errorMessages.address.city}
                 </p> : null}
               </div>
             </div>
@@ -184,7 +198,7 @@ export function UserForm(props){
                 onChange={(e) => handleChange(e, setDataForm, dataForm)}/>
                 </div>
                 { errorForm.address.street ? <p className={styles["form-error"]}>
-                  Street should be at least 3 characters long!
+                  {errorMessages.address.street}
                 </p> : null}
               </div>
               <div className={styles["form-group"]}>
@@ -197,16 +211,12 @@ export function UserForm(props){
                 onChange={(e) => handleChange(e, setDataForm, dataForm)}/>
                 </div>
                 { errorForm.address.street_number ? <p className={styles["form-error"]}>
-                  Street number should be a positive number!
+                  {errorMessages.address.street_number}
                 </p> : null}
               </div>
             </div>
             <div className={styles["form-actions"]}>
-              <button onClick={(e) => handleSubmitForm(e, request, [USERS, {
-                "method": "POST",
-                "headers": { 'Content-Type': 'application/json' },
-                "body": JSON.stringify(dataForm),
-              }, setDataForm, setErrorForm])}
+              <button onClick={(e) => submitFunction(e, USERS, dataForm, setDataForm, errorForm)}
                className={`${styles.btn} ${button_styles.save} ${styles["action-save"]}`} type="submit" tabIndex={0}>Save</button>
               <button onClick={(e) => handleClose(e, stateFunction)}
                className={`${styles.btn} ${button_styles.cancel} ${styles["action-cancel"]}`} type="button" tabIndex={0}>
