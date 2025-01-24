@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",  // Ensure the code is compiled to the latest JS features
+        "lib": ["ESNext", "DOM"],  // Include the latest JavaScript and DOM APIs
+        "module": "CommonJS",  // This ensures compatibility with Node.js
+        "strict": true  // Optional but ensures stricter type checking
+      },
+    "exclude": [
+        "node_modules"
+    ]
+}
